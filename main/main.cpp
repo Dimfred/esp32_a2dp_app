@@ -12,9 +12,7 @@ using namespace app;
 void app_main()
 { try {
 
-   gpio_install_isr_service(0);
-   esp_sleep_enable_ext0_wakeup(Pins::control_btn, HIGH);
-   Tasks::startup.create();
+   App::run();
 
 } FC_LOG_AND_RETHROW() }
 

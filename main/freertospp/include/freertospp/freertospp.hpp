@@ -10,21 +10,21 @@
 namespace freertospp {
 
 uint32_t ms_to_ticks(uint32_t ms);
+uint32_t s_to_ticks(uint8_t s);
 void delay(uint32_t ms);
 
 class Task
 {
 public:
-   Task(uint16_t priority, uint16_t stacksize, void* params,
-      const char* const name, TaskFunction_t func ) : _func(func),
-         _priority(priority), _stacksize(stacksize), _params(params),
-         _name(name), _handle(nullptr)
+   Task(uint16_t priority, uint16_t stacksize, const char* const name,
+         TaskFunction_t func ) : _func(func), _priority(priority),
+         _stacksize(stacksize), _name(name), _handle(nullptr)
    {
    }
 
-   void create() const
+   void create(void* params = nullptr) const
    {
-      xTaskCreate(_func, _name, _stacksize, _params, _priority, &_handle);
+      xTaskCreate(_func, _name, _stacksize, params, _priority, &_handle);
    }
 
    void destroy() const
@@ -56,7 +56,6 @@ private:
    TaskFunction_t _func;
    uint16_t _priority;
    uint16_t _stacksize;
-   void * _params;
    const char* const _name;
 
    mutable TaskHandle_t _handle;
@@ -75,9 +74,11 @@ public:
    {
    }
 
-   bool create() const
+   bool create(bool start = true) const
    {
       _handle = xTimerCreate(_name, _period_in_ticks, _auto_reload, _id, _func);
+      if(start)
+         this->start();
       return _handle != nullptr;
    }
 
