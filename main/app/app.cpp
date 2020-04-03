@@ -261,24 +261,8 @@ void A2dp::on_audio_configure(const a2dp::audio_config& param)
 
 void Bluetooth::authentication(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
 {
-   switch (event)
-   {
-   // case ESP_BT_GAP_AUTH_CMPL_EVT:
-   //    if (param->auth_cmpl.stat == ESP_BT_STATUS_SUCCESS) {
-   //       LOG( "Auth success" );
-   //    }
-   //    else {
-   //       LOG( "Auth failed" );
-   //    }
-   //    break;
-
-   case ESP_BT_GAP_CFM_REQ_EVT:
+   if( event == ESP_BT_GAP_CFM_REQ_EVT )
       esp_bt_gap_ssp_confirm_reply(param->cfm_req.bda, true);
-      break;
-
-   default:
-      break;
-   }
 }
 
 } // app
